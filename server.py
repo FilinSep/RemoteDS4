@@ -17,7 +17,7 @@ ds4 = vgamepad.VDS4Gamepad()
 def make():
     os.system('cls')
 
-    HOST = "127.0.0.1"
+    HOST = "26.122.140.201"
     PORT = 5565
     
     print('Created virtual DS4 gamepad. Number:' + Fore.YELLOW, ds4.get_index() + 1, Fore.RESET)
@@ -32,16 +32,27 @@ def make():
             while True:
                 try: 
                     r_data = conn.recv(1024)
-                    redata = re.match(r'\{.*\}', r_data.decode())
+                    redata = r_data.decode().replace('}', '}<>')
                     
-                    groups = []
-                    if not redata.groups():
-                        groups.append(redata[0])
+                    groups = redata.split('<>')
 
                     for data in groups:
-                        data = json.loads(data)
+                        if not data:
+                            continue
+
+                        if not data.endswith('}'):
+                            data += '}'
+                        
+                        try: data = json.loads(data)
+                        except: continue
+
+                        if 't' not in data:
+                            continue
 
                         if data['t'] == 'down':
+                            if 'key' not in data:
+                                continue
+
                             if keymaps[data['key']].__class__ == vgamepad.DS4_SPECIAL_BUTTONS:
                                 ds4.press_special_button(keymaps[data['key']])
                             elif keymaps[data['key']].__class__ == vgamepad.DS4_DPAD_DIRECTIONS:
@@ -52,6 +63,9 @@ def make():
                             ds4.update()
                             
                         elif data['t'] == 'up':
+                            if 'key' not in data:
+                                continue
+
                             if keymaps[data['key']].__class__ == vgamepad.DS4_SPECIAL_BUTTONS:
                                 ds4.release_special_button(keymaps[data['key']])
                             elif keymaps[data['key']].__class__ == vgamepad.DS4_DPAD_DIRECTIONS:
@@ -64,18 +78,22 @@ def make():
                             print('OUTPUT ' + Fore.YELLOW + f'{keymaps[data['key']].name}', Fore.RESET)
 
                         elif data['t'] == 'axis':
-                            ds4.left_trigger_float(data['l2_a'])
-                            ds4.update()
-                            ds4.right_trigger_float(data['r2_a'])
-                            ds4.update()
+                            if 'l2_a' in data:
+                                ds4.left_trigger_float(data['l2_a'])
+                                ds4.update()
+                            if 'r2_a' in data:
+                                ds4.right_trigger_float(data['r2_a'])
+                                ds4.update()
 
-                            ds4.left_joystick_float(data['l3_x'], data['l3_y'])
-                            ds4.update()
-                            ds4.right_joystick_float(data['r3_x'], data['r3_y'])
-                            ds4.update()
+                            if 'l3_x' in data and 'l3_y' in data:
+                                ds4.left_joystick_float(data['l3_x'], data['l3_y'])
+                                ds4.update()
+                            if 'r3_x' in data and 'r3_y' in data:
+                                ds4.right_joystick_float(data['r3_x'], data['r3_y'])
+                                ds4.update()
                     
                 except Exception as e: 
-                    print('Party ended :(', e)
+                    print('Party ended with error: ', e)
                     input()
                     break
 
