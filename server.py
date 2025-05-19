@@ -1,3 +1,7 @@
+HOST = "localhost" # Change to your ip
+PORT = 5565 # Change to your port
+
+
 import colorama
 colorama.init()
 from colorama import Fore
@@ -15,11 +19,6 @@ ds4 = vgamepad.VDS4Gamepad()
 
 
 def make():
-    os.system('cls')
-
-    HOST = "26.122.140.201"
-    PORT = 5565
-    
     print('Created virtual DS4 gamepad. Number:' + Fore.YELLOW, ds4.get_index() + 1, Fore.RESET)
     print('Hosting server on ' + Fore.YELLOW + f'{HOST}:{PORT}' + Fore.RESET)
 
