@@ -15,7 +15,7 @@ import time
 
 def join():
     print(Fore.LIGHTGREEN_EX + 'RemoteDS4')
-    print(Fore.RESET + 'GitHub: https://github.com/FilinSep')
+    print(Fore.RESET + 'GitHub: https://github.com/FilinSep/RemoteDS4')
     print()
     print(Fore.YELLOW + '*' + Fore.RESET + ' Allows you to play local co-op games on the DualShock4 joystick as a multiplayer using python sockets. Also you can use RadminVPN.')
     print()
