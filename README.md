@@ -1,6 +1,8 @@
 # RemoteDS4
 **RemoteDS4** is a tool for remote playing in local co-op games. Made for DualShock4 gamepads.
 
+ONLY SUPPORTS 1 CLIENT!!!!!
+
 # As second player
 Go to releases and download client file
 
