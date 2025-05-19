@@ -75,7 +75,7 @@ def join():
             print('Party ended :(')
             input()
             exit()
-        except Exception as e:
+        except:
             print('Waiting for DualShock4...', end='\r')
  
 
