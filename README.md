@@ -1,6 +1,8 @@
 # RemoteDS4
 **RemoteDS4** is a tool for remote playing in local co-op games. Made for DualShock4 gamepads.
 
+ONLY SUPPORTS 1 CLIENT!!!!!
+
 # As second player
 Go to releases and download client file
 
@@ -11,13 +13,17 @@ https://www.python.org/
 ## Setup project
 Open cmd in project folder and write command
 
-
 ```pip install -r requirements.txt```
 ## Host server
 Use Radmin or Hamachi. 
 
-Open cmd in project folder and write command
+Change ip and port in server.py script
+```py
+HOST = "localhost" # Change to your ip
+PORT = 5565 # Change to your port
+```
 
+Open cmd in project folder and write command
 
 ```py server.py```
 
