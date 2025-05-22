@@ -23,7 +23,7 @@ def validate(data) -> bool:
     if 't' not in data:
         return False
     
-    if data['t'] == 'down' or data['t'] == 'up' and 'key' not in data:
+    if (data['t'] == 'down' or data['t'] == 'up') and 'key' not in data:
         return False
     
     return True
