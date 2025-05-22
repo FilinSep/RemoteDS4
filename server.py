@@ -8,14 +8,25 @@ from colorama import Fore
 
 import json
 import socket
-import os
-import re
 
 import vgamepad
 from keymaps import keymaps
 
 
 ds4 = vgamepad.VDS4Gamepad()
+
+
+def validate(data) -> bool:
+    if not data:
+        return False
+    
+    if 't' not in data:
+        return False
+    
+    if data['t'] == 'down' or data['t'] == 'up' and 'key' not in data:
+        return False
+    
+    return True
 
 
 def make():
@@ -36,22 +47,13 @@ def make():
                     groups = redata.split('<>')
 
                     for data in groups:
-                        if not data:
-                            continue
-
-                        if not data.endswith('}'):
-                            data += '}'
-                        
                         try: data = json.loads(data)
                         except: continue
 
-                        if 't' not in data:
+                        if not validate(data):
                             continue
 
                         if data['t'] == 'down':
-                            if 'key' not in data:
-                                continue
-
                             if keymaps[data['key']].__class__ == vgamepad.DS4_SPECIAL_BUTTONS:
                                 ds4.press_special_button(keymaps[data['key']])
                             elif keymaps[data['key']].__class__ == vgamepad.DS4_DPAD_DIRECTIONS:
@@ -62,9 +64,6 @@ def make():
                             ds4.update()
                             
                         elif data['t'] == 'up':
-                            if 'key' not in data:
-                                continue
-
                             if keymaps[data['key']].__class__ == vgamepad.DS4_SPECIAL_BUTTONS:
                                 ds4.release_special_button(keymaps[data['key']])
                             elif keymaps[data['key']].__class__ == vgamepad.DS4_DPAD_DIRECTIONS:
